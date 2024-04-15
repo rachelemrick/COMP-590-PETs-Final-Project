@@ -1,37 +1,66 @@
+// Dependencies
+var http = require('http');
+// var JIFFServer = require('../../lib/jiff-server.js');
 const { JIFFServer } = require('jiff-mpc');
+var mpc = require('./mpc.js');
 
-const options = {
-  // Customize the maximum headers count allowed in a request
-  maxHeadersCount: 10,
+// Create express and http servers
+var express = require('express');
+var app = express();
+http = http.Server(app);
 
-  // Customize the timeout for socket connections
-  timeout: 60000
-};
-
-const http = require('http');
-const port = process.env.PORT || 3000; // Define the port to listen on
-
-// Create an HTTP server
-const server = http.createServer();
-
-// Create the JIFF server instance passing the HTTP server and options
-const jiffServer = new JIFFServer(server, options);
-
-// Start listening for connections
-server.listen(port, () => {
-  console.log(`JIFF server running at http://localhost:${port}/`);
-});
-
-server.on('request', (req, res) => {
-  if (req.method === 'POST' && req.url === '/hello') {
-    let body = '';
-    req.on('data', chunk => {
-      body += chunk.toString();
-    });
-    req.on('end', () => {
-      console.log('Received "hello" message from client:', body);
-      res.writeHead(200, {'Content-Type': 'text/plain'});
-      res.end('Hello from the server!');
-    });
+// Create JIFF server
+var jiff_instance = new JIFFServer(http, {
+  logs: false,
+  socketOptions: {
+    pingTimeout: 1000,
+    pingInterval: 2000
   }
 });
+jiff_instance.computationMaps.maxCount['web-mpc'] = 100000; // upper bound on how input parties can submit!
+
+// Specify the computation server code for this demo
+var computationClient = jiff_instance.compute('web-mpc', {
+  crypto_provider: true
+});
+computationClient.wait_for([1], function () {
+  // Perform server-side computation.
+  console.log('Computation initialized!');
+
+  // When the analyst sends the begin signal, we start!
+  computationClient.listen('begin', function () {
+    console.log('Analyst sent begin signal!');
+
+    // Get all connected parties IDs
+    var party_count = 0;
+    var party_map = jiff_instance.socketMaps.socketId['web-mpc'];
+    for (var id in party_map) {
+      if (party_map.hasOwnProperty(id)) {
+        party_count++;
+      }
+    }
+
+    // Send number of parties to analyst
+    computationClient.emit('number', [ 1 ], party_count.toString());
+
+    // execute the mpc protocol
+    mpc(computationClient, party_count);
+
+    // clean shutdown
+    setTimeout(function () {
+      console.log('Shutting Down!');
+      http.close();
+    }, 1000);
+  });
+});
+
+http.listen(8080, function () {
+  console.log('listening on *:8080');
+});
+
+console.log('web-mpc demo..');
+console.log('The steps for running are as follows:');
+console.log('1. Run the analyst (node analyst.js)');
+console.log('2. After the analyst sets up the computation, you can choose to terminate it or leave it around');
+console.log('3. Run "node input-party.js <input number>" to create a new input party and submit its input');
+console.log('4. When desired, press enter in the analyst terminal (after re-running it if previously closed) to compute the output and close the session');

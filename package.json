@@ -11,6 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2",
-    "jiff-mpc": "^1.0.0"
+    "fs": "^0.0.1-security",
+    "jiff-mpc": "^1.0.0",
+    "path": "^0.12.7",
+    "readline": "^1.3.0"
   }
 }
