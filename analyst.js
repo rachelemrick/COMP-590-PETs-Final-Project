@@ -5,7 +5,7 @@ var readline = require('readline');
 
 // var JIFFClient = require('../../lib/jiff-client.js');
 const { JIFFClient } = require('jiff-mpc');
-var mpc = require('./mpc.js');
+const { computeAverage, computeSum } = require('./functions/arithmetic.js');
 
 // Handle storing and loading keys
 var KEYS_FILE = 'keys.json';
@@ -69,11 +69,15 @@ jiffClient.wait_for(['s1'], function () {
       party_count = parseInt(party_count);
       console.log('BEGIN: # of parties ' + party_count);
 
-      mpc(jiffClient, party_count).then(function (sum) {
-        console.log('SUM IS: ' + sum);
+      computeAverage(jiffClient, party_count).then((mean) => {
+        console.log("mean: " + mean);
         jiffClient.disconnect(true, true);
         rl.close();
-      });
+      }
+    )
+      .catch(function (error) {
+    console.error('Error computing average:', error);
+  });
     });
   });
 });
