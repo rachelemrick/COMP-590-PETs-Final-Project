@@ -2,14 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = 3000;
 
 // Middleware for parsing JSON bodies
 app.use(bodyParser.json());
-
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
-});
 
 // API endpoint to receive inputs
 app.post('/inputs', (req, res) => {
@@ -23,6 +19,7 @@ app.post('/inputs', (req, res) => {
   res.json({ message: 'Input received successfully' });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is listening at http://localhost:${port}`);
 });
