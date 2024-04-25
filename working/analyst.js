@@ -5,7 +5,7 @@ var readline = require('readline');
 
 // var JIFFClient = require('../../lib/jiff-client.js');
 const { JIFFClient } = require('jiff-mpc');
-const { computeAverage, computeSum } = require('./functions/arithmetic.js');
+const { computeAverage, computeSum } = require('../functions/arithmetic.js');
 
 // Handle storing and loading keys
 var KEYS_FILE = 'keys.json';

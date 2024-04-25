@@ -3,6 +3,11 @@ var http = require('http');
 // var JIFFServer = require('../../lib/jiff-server.js');
 const { JIFFServer } = require('jiff-mpc');
 var mpc = require('./mpc.js');
+const path = require('path');
+const bodyParser = require('body-parser');
+
+const { startAnalyst } = require('./analyst.js');
+const { clientlogic } = require('./clientlogic.js');
 
 // Create express and http servers
 var express = require('express');
@@ -52,6 +57,24 @@ computationClient.wait_for([1], function () {
       http.close();
     }, 1000);
   });
+});
+
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
+// app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// Endpoint to handle the AJAX request
+app.post('/start-analyst', (req, res) => {
+  startAnalyst(); // Call your Node.js function
+  res.send('Node function called successfully');
+});
+
+app.post('/share-input', (req, res) => {
+  const data = req.body;
+  const input = parseInt(data['input']);
+  clientlogic(input); // Call your Node.js function
+  res.send('Node function called successfully');
 });
 
 http.listen(8080, function () {
