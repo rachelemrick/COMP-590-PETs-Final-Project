@@ -1,10 +1,16 @@
 // Dependencies
 var http = require('http');
-const bodyParser = require('body-parser');
+// var JIFFServer = require('../../lib/jiff-server.js');
 const { JIFFServer } = require('jiff-mpc');
-const routes = require('./routes.js');
-const express = require('express');
-const mpc = require('../mpc.js')
+var mpc = require('../mpc.js');
+const path = require('path');
+const bodyParser = require('body-parser');
+
+const { startAnalyst } = require('./analyst.js');
+const { clientlogic } = require('./clientlogic.js');
+
+// Create express and http servers
+var express = require('express');
 var app = express();
 http = http.Server(app);
 
@@ -53,20 +59,31 @@ computationClient.wait_for([1], function () {
   });
 });
 
-// Mount API routes
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
+// app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.post('/inputs', (req, res) => {
-  // Assuming the client sends data in JSON format
-  const inputData = req.body;
+// Endpoint to handle the AJAX request
+app.post('/start-analyst', (req, res) => {
+  startAnalyst(); // Call your Node.js function
+  res.send('Node function called successfully');
+});
 
-  // Do something with the input data (e.g., log it)
-  console.log('Received input data:', inputData);
-
-  // Send a response (optional)
-  res.json({ message: 'Input received successfully' });
+app.post('/share-input', (req, res) => {
+  const data = req.body;
+  const input = parseInt(data['input']);
+  clientlogic(input); // Call your Node.js function
+  res.send('Node function called successfully');
 });
 
 http.listen(8080, function () {
   console.log('listening on *:8080');
 });
+
+console.log('web-mpc demo..');
+console.log('The steps for running are as follows:');
+console.log('1. Run the analyst (node analyst.js)');
+console.log('2. After the analyst sets up the computation, you can choose to terminate it or leave it around');
+console.log('3. Run "node input-party.js <input number>" to create a new input party and submit its input');
+console.log('4. When desired, press enter in the analyst terminal (after re-running it if previously closed) to compute the output and close the session');
