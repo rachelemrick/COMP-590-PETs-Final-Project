@@ -12,3 +12,6 @@
 <img width="328" alt="Screenshot 2024-04-25 at 4 00 38 AM" src="https://github.com/rachelemrick/COMP-590-PETs-Final-Project/assets/75612806/dd007baa-a633-4078-a3ea-d9bc29d3f930">
 
 7. Go back to the terminal and hit "Enter"
+
+https://github.com/rachelemrick/COMP-590-PETs-Final-Project/assets/75612806/71cf7287-8300-47c7-a547-2f7726ae78ef
+
