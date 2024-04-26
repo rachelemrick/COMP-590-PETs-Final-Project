@@ -86,24 +86,53 @@
   
 
 
-  
-   <p>Have you ever used drugs, including alcohol?</p>
-  <ul id = "truefalse">
+    <p>Have you ever drank alcohol (more than just a sip)?</p>
+  <ul id = "truefalse_alcohol">
     <li>
-      <input type="radio" id="yes" name="truefalse" value="yes" > Yes
-      <input type="radio" id="no" name="truefalse" value="no" > No
+      <input type="radio" id="yes_alc" name="truefalse_alcohol" value="yes_alc" > Yes
+      <input type="radio" id="no_alc" name="truefalse_alcohol" value="no_alc" > No
+    </li>
+  </ul>
+  
+   <p>Have you ever used marijuana?</p>
+  <ul id = "truefalse_marijuana">
+    <li>
+      <input type="radio" id="yes_mar" name="truefalse_marijuana" value="yes_mar" > Yes
+      <input type="radio" id="no_mar" name="truefalse_marijuana" value="no_mar" > No
     </li>
   </ul>
 
  
      </div>
 
-  <div id="remaining_questions" style="display: none;">
-  <p>How many days have you had ≥ 5 (male) or ≥ 4 (female) alcoholic drinks in two hour period over the last month?</p>
-  <input type="number" name="frequency" id="frequency"placeholder="Input a number here:">
+  <div id="remaining_questions_alcohol" style="display: none;">
+  <p>What age did you first drink alcohol (more than just a sip)?</p>
+  <input type="number" name="first_alcohol_age" id="first_alcohol_age" value="10"placeholder="Input the age here:" required>
   <br>
 
-  <p>Why did you start using drugs? For each item that is true for you, rank the following reasons from most important (1) to least important (5):</p>
+  <p>How many days have you drank alcohol over the last month?</p>
+  <input type="number" name="alcohol_use_frequency" id="alcohol_use_frequency" value="10"placeholder="Input a number here:" required>
+  <br>
+
+  <p>How many days have you had ≥ 5 (male) or ≥ 4 (female) alcoholic drinks in two hour period over the last month?</p>
+  <input type="number" name="binge_frequency" id="binge_frequency"placeholder="Input a number here:">
+  <br>
+  </div>
+
+  <div id="remaining_questions_marijuana" style="display: none;">
+  <p>What age did you first use marijuana?</p>
+  <input type="number" name="first_alcohol_age" id="age" value="10"placeholder="Input the age here:" required>
+  <br>
+
+  <p>How many days have you used marijuana over the last month?</p>
+  <input type="number" name="marijuana_use_frequency" id="marijuana_use_frequency" value="10"placeholder="Input a number here:" required>
+  <br>
+
+  </div>
+
+  <div id="remaining_questions_either" style="display: none;">
+
+  <p>Why did you start using alcohol or drugs? For each item that is true for you, rank the following reasons from most important (1) to least important (5):</p>
   <ul id = "rank">
     <li>Curiosity</li>
       <li>
@@ -241,18 +270,43 @@
   </script>
   
   <script>
-    const firstTimeInput = document.getElementsByName('truefalse');
-    const remainingQuestions = document.getElementById('remaining_questions');
+    const firstTimeInputAlcohol = document.getElementsByName('truefalse_alcohol');
+    const remainingQuestionsAlcohol = document.getElementById('remaining_questions_alcohol');
+    const remainingQuestionsEither = document.getElementById('remaining_questions_either');
 
-    firstTimeInput.forEach(radio => {
+    const firstTimeInputMarijuana = document.getElementsByName('truefalse_marijuana');
+    const remainingQuestionsMarijuana = document.getElementById('remaining_questions_marijuana');
+
+    firstTimeInputAlcohol.forEach(radio => {
       radio.addEventListener('change', (event) => {
-        if (event.target.value === 'yes') {
-          remainingQuestions.style.display = 'block';
+        if (event.target.value === 'yes_alc') {
+          remainingQuestionsAlcohol.style.display = 'block';
+          remainingQuestionsEither.style.display = 'block';
         } else {
-          remainingQuestions.style.display = 'none';
+          remainingQuestionsAlcohol.style.display = 'none';
+          // If alcohol is changed to 'no', check if marijuana is 'no' as well, then hide
+          if (firstTimeInputMarijuana.value === 'no_mar') {
+            remainingQuestionsEither.style.display = 'none';
+          }
         }
       });
     });
+
+    firstTimeInputMarijuana.forEach(radio => {
+      radio.addEventListener('change', (event) => {
+        if (event.target.value === 'yes_mar') {
+          remainingQuestionsMarijuana.style.display = 'block';
+          remainingQuestionsEither.style.display = 'block';
+        } else {
+          remainingQuestionsMarijuana.style.display = 'none';
+          // If marijuana is changed to 'no', check if alcohol is 'no' as well, then hide
+          if (firstTimeInputAlcohol.value === 'no_alc') {
+            remainingQuestionsEither.style.display = 'none';
+          }
+        }
+      });
+    });
+
   </script>
   
   <script>
@@ -273,7 +327,28 @@
   });
     </script>
   
-  
+  <script>
+    // This script will gather all of the input from the questions and vectorize it
+    document.getElementById("submit").onclick = function() { 
+      // When the submit button is pressed, run the code in this anonymous function
+      var inputArray = [];
+      
+      // Get age
+      inputArray.push(document.getElementById("age").value);
+
+      // Get gender: 0 = woman, 1 = man, 2 = non-binary, 3 = prefer not to say
+      var gender = 3
+      if (document.getElementById("gender_woman").value == true) {
+        gender = 0
+      } else if (document.getElementById("gender_man").value == true) {
+        gender = 1
+      } else if (document.getElementById("gender_nonbinary").value = true) {
+        gender = 2
+      }
+      inputArray.push(gender)
+
+    };
+  </script>
   
 </body>
 </html>
