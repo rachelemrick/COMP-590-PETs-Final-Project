@@ -72,8 +72,13 @@ app.post('/start-analyst', (req, res) => {
 
 app.post('/share-input', (req, res) => {
   const data = req.body;
-  const input = parseInt(data['input']);
-  clientlogic(input); // Call your Node.js function
+  //const input = parseInt(data['input']);    // Original line of code, for only one input
+  const inputStrings = data['input'].split(" ");
+  var inputInts = []
+  for (inputString in inputStrings) {
+    inputInts.push(parseInt(inputString))
+  }
+  clientlogic(inputInts); // Call your Node.js function
   res.send('Node function called successfully');
 });
 

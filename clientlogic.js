@@ -11,7 +11,9 @@ function clientlogic(input)
   // Wait for server to connect
   jiffClient.wait_for([1, 's1'], function () {
     console.log('Connected! ID: ' + jiffClient.id);
-    jiffClient.share(input, 2, [1, 's1'], [ jiffClient.id ]);
+    // jiffClient.share(input, 2, [1, 's1'], [ jiffClient.id ]);    // Original line, only share one value
+    // Share an array of values, length=19 because we have 19 places to respond
+    jiffClient.share_array(input, lengths=19, threshold=2, receivers_list=[1, 's1'], senders_list=[ jiffClient.id ]);
     console.log('Shared input!');
     jiffClient.disconnect(true, true);
     console.log('Disconnected!');
