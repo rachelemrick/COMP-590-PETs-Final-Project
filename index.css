@@ -1,0 +1,26 @@
+#title {
+    text-align: center;
+    
+ }
+  
+  #truefalse {
+   list-style-type: none;
+   padding: 0px;
+   margin-bottom: 20px;
+ }
+ 
+ html, body {
+   height: 100%; /* This is important for vertical centering */
+   margin: 25; /* Remove default margins */
+   text-align: center;
+   font-size: 20px;
+ }
+ 
+ #rank {
+     list-style-type: none;
+ }
+ 
+ #age {
+   appearance: none;
+ }
+  
