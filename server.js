@@ -65,25 +65,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-
-
 const returnAnalystStatus = () => {
   if (!isAnalystRunning) {
     // Start the analyst here
     startAnalyst();
-    isAnalystRunning = true;
-    return 'Analyst started successfully';
+    isAnalystRunning = true;   
+    return { message: 'Analyst started successfully', status: 200 };
   }
   else {
-    return 'Analyst is already running';
+    return { message: 'Analyst is already running', status: 409 };
   }
 };
-
-
 // Endpoint to handle the AJAX request
 app.post('/start-analyst', (req, res) => {
   const result = returnAnalystStatus();
-  res.send(result);
+  res.status(result.status).send(result.message);
 });
 
 app.post('/share-input', (req, res) => {
