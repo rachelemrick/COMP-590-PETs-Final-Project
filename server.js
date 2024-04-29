@@ -13,6 +13,7 @@ const { clientlogic } = require('./clientlogic.js');
 var express = require('express');
 var app = express();
 http = http.Server(app);
+let isAnalystRunning = false;
 
 // Create JIFF server
 var jiff_instance = new JIFFServer(http, {
@@ -64,10 +65,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+const returnAnalystStatus = () => {
+  if (!isAnalystRunning) {
+    // Start the analyst here
+    startAnalyst();
+    isAnalystRunning = true;   
+    return { message: 'Analyst started successfully', status: 200 };
+  }
+  else {
+    return { message: 'Analyst is already running', status: 409 };
+  }
+};
 // Endpoint to handle the AJAX request
 app.post('/start-analyst', (req, res) => {
-  startAnalyst(); // Call your Node.js function
-  res.send('Node function called successfully');
+  const result = returnAnalystStatus();
+  res.status(result.status).send(result.message);
 });
 
 app.post('/share-input', (req, res) => {
