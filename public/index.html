@@ -107,11 +107,11 @@
 
   <div id="remaining_questions_alcohol" style="display: none;">
   <p>What age did you first drink alcohol (more than just a sip)?</p>
-  <input type="number" name="first_alcohol_age" id="first_alcohol_age" value="10" placeholder="Input the age here:" required>
+  <input type="number" name="first_alcohol_age" id="first_alcohol_age" placeholder="Input the age here:" required>
   <br>
 
   <p>How many days have you drank alcohol over the last month?</p>
-  <input type="number" name="alcohol_use_frequency" id="alcohol_use_frequency" value="10" placeholder="Input a number here:" required>
+  <input type="number" name="alcohol_use_frequency" id="alcohol_use_frequency" placeholder="Input a number here:" required>
   <br>
 
   <p>How many days have you had ≥ 5 (male) or ≥ 4 (female) alcoholic drinks in two hour period over the last month?</p>
@@ -121,18 +121,18 @@
 
   <div id="remaining_questions_marijuana" style="display: none;">
   <p>What age did you first use marijuana?</p>
-  <input type="number" name="first_alcohol_age" id="age" value="10" placeholder="Input the age here:" required>
+  <input type="number" name="first_alcohol_age" id="age" placeholder="Input the age here:" required>
   <br>
 
   <p>How many days have you used marijuana over the last month?</p>
-  <input type="number" name="marijuana_use_frequency" id="marijuana_use_frequency" value="10" placeholder="Input a number here:" required>
+  <input type="number" name="marijuana_use_frequency" id="marijuana_use_frequency" placeholder="Input a number here:" required>
   <br>
 
   </div>
 
   <div id="remaining_questions_either" style="display: none;">
 
-  <p>Why did you start using alcohol or drugs? For each item that is true for you, rank the following reasons from most important (1) to least important (5):</p>
+  <p>Why did you start using alcohol and/or marijuana? For each item that is true for you, rank the following reasons from most important (1) to least important (5):</p>
   <ul id = "rank">
     <li>Curiosity</li>
       <li>
@@ -254,6 +254,8 @@
             </select>
           </li>
   </ul>
+  </div>
+  <div id="submit_button_div" style="display: none;">
   
        <button id="submit"type="submit">Submit Questionnaire</button>
 
@@ -266,6 +268,7 @@
 
 		startButton.addEventListener('click', () => {
   	questionnaire.style.display = 'block';
+    document.getElementById('submit_button_div').style.display = 'block';
 });
   </script>
   
@@ -311,24 +314,6 @@
     });
 
   </script>
-  
-  <script>
-  //  const ageInput = document.getElementById('age');
-  
-  //ageInput.addEventListener('input', () => {
-    //const value = parseInt(ageInput.value); // Convert input value to a number
-  
-    //if (value > 21) {
-    //  ageInput.value = 21; // Clear the input if outside the range
-    //  alert('Please enter a value between 10 and 21.');
-    //} else if (value < 10){
-    //ageInput.value = 21; // Clear the input if outside the range
-    //  alert('Please enter a value between 10 and 21.');
-    //
-    //}
-    
-  //});
-    </script>
   
   <script>
     // This script will gather all of the input from the questions and vectorize it
