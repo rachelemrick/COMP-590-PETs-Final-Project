@@ -313,21 +313,21 @@
   </script>
   
   <script>
-    const ageInput = document.getElementById('age');
+  //  const ageInput = document.getElementById('age');
   
-  ageInput.addEventListener('input', () => {
-    const value = parseInt(ageInput.value); // Convert input value to a number
+  //ageInput.addEventListener('input', () => {
+    //const value = parseInt(ageInput.value); // Convert input value to a number
   
-    if (value > 21) {
-      ageInput.value = value-1; // Clear the input if outside the range
-      alert('Please enter a value between 10 and 21.');
-    } else if (value < 10){
-    ageInput.value = value+1; // Clear the input if outside the range
-      alert('Please enter a value between 10 and 21.');
+    //if (value > 21) {
+    //  ageInput.value = 21; // Clear the input if outside the range
+    //  alert('Please enter a value between 10 and 21.');
+    //} else if (value < 10){
+    //ageInput.value = 21; // Clear the input if outside the range
+    //  alert('Please enter a value between 10 and 21.');
+    //
+    //}
     
-    }
-    
-  });
+  //});
     </script>
   
   <script>
@@ -337,7 +337,14 @@
       var inputArray = [];
       
       // Get age (index = 0)
-      inputArray.push(document.getElementById("age").value);
+      // First, make sure it is within [10, 20]
+      ageInput = document.getElementById('age')
+      if ((parseInt(ageInput.value) < 10) || (parseInt(ageInput.value) > 20)) {
+        alert('Please enter a value for age between 10 and 20, inclusive.');
+        return;
+      }
+
+      inputArray.push(ageInput.value);
 
       // Get gender (index = 1): 0 = woman, 1 = man, 2 = non-binary, 3 = prefer not to say
       var gender = 3;
