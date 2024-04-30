@@ -89,6 +89,18 @@ app.post('/share-input', (req, res) => {
   res.send('Node function called successfully');
 });
 
+app.post('/share-input-array', (req, res) => {
+  const data = req.body;
+  const inputs = parseInt(data['inputs']); // Assuming 'inputs' is the key for the array in the request body
+  if (!Array.isArray(inputs)) {
+    return res.status(400).send('Inputs should be an array');
+  }
+  // Assuming clientlogic accepts an array as input
+  clientarraylogic(inputs); // Call your Node.js function with the array of inputs
+  res.send('Node function called successfully');
+  console.log('Array Node function called successfully');
+});
+
 http.listen(8080, function () {
   console.log('listening on *:8080');
 });

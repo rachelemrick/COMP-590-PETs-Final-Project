@@ -19,6 +19,26 @@ function clientlogic(input)
 
 }
 
+function clientarraylogic(inputs) {
+
+  var jiffClient = new JIFFClient('http://localhost:8080', 'web-mpc');
+
+  // Wait for server to connect
+  jiffClient.wait_for([1, 's1'], function () {
+    console.log('Connected! ID: ' + jiffClient.id);
+
+    // Share each element of the input array
+    var shares = inputs.map(function(input) {
+      return jiffClient.share(input, 2, [1, 's1'], [jiffClient.id]);
+    });
+
+    console.log('Shared input!');
+    jiffClient.disconnect(true, true);
+    console.log('Disconnected!');
+  });
+}
+
 module.exports = {
   clientlogic: clientlogic,
+  clientarraylogic: clientarraylogic,
 }
