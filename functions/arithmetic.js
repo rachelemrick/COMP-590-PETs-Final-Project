@@ -21,6 +21,24 @@ async function computeAverage(jiffClient, party_count) {
   return average;
 }
 
+async function computeCorrelation(x_array, y_array) {
+  // compute Correlation btwn two variables when both are stored as arrays
+  // First find their averages
+  x_mean = computeAverageOfArray(x_array);
+  y_mean = computeAverageOfArray(y_array);
+
+  // TODO: finish using JIFF commands
+}
+
+function computeAverageOfArray(array) {
+  // TODO: does this need to be changed to use JIFF commands?
+  sum = 0
+  for (element of array) {
+    sum += element
+  }
+  return sum / array.length
+}
+
 module.exports = {
     computeSum: computeSum,
     computeAverage: computeAverage,

@@ -82,12 +82,27 @@ app.post('/start-analyst', (req, res) => {
   res.status(result.status).send(result.message);
 });
 
+
 app.post('/share-input', (req, res) => {
   const data = req.body;
-  const input = parseInt(data['input']);
-  clientlogic(input); // Call your Node.js function
+  //const input = parseInt(data['input']);    // Original line of code, for only one input
+  // Loop through the string of input ints, e.g. "0 0 1 1 0 ..." with 19 numbers, and parse them
+  // into an array of length 19.
+  const inputStrings = data['input'].split(", ");
+  var inputInts = []
+  for (inputString in inputStrings) {
+    inputInts.push(parseInt(inputString))
+  }
+  alert('Input parsed successfully');
+  alert(inputInts);
+  clientlogic(inputInts); // Call your Node.js function
   res.send('Node function called successfully');
 });
+
+http.listen(8080, function () {
+  console.log('listening on *:8080');
+});
+
 
 http.listen(8080, function () {
   console.log('listening on *:8080');
