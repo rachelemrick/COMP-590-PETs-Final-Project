@@ -7,7 +7,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 
 const { startAnalyst } = require('./analyst.js');
-const { clientlogic } = require('./clientlogic.js');
+const { clientlogic, clientShareArray } = require('./clientlogic.js');
 
 // Create express and http servers
 var express = require('express');
@@ -69,7 +69,7 @@ const returnAnalystStatus = () => {
   if (!isAnalystRunning) {
     // Start the analyst here
     startAnalyst();
-    isAnalystRunning = true;   
+    isAnalystRunning = true;
     return { message: 'Analyst started successfully', status: 200 };
   }
   else {

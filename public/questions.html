@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Questions</title>
+</head>
+<body>
+  <h2>Anonymous Adolescent Drug Use Questionnaire</h2>
+  <form action="/" method="post">
+    <label for="age">Your age</label>
+    <input type="number" name="age" id="age" value="10"placeholder="Input your age here:" required>
+    <button type="button" onclick="clientlogic()">Submit</button>
+  </form>
+  <script>
+  // Function to make AJAX request and call Node.js function
+  function clientlogic() {
+    var inputData = document.getElementById('age').value;
+    if (!inputData) {
+      alert("please enter a number");
+      return; // Exit function if input is empty
+    }
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/share-input");
+    xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+    const body = JSON.stringify({
+      input: inputData,
+    });
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        alert('Input shared successfully');
+      }
+    };
+    xhr.send(body);
+  }
+</script>
+
+</body>
+</html>

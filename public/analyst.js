@@ -5,7 +5,7 @@ var readline = require('readline');
 
 // var JIFFClient = require('../../lib/jiff-client.js');
 const { JIFFClient } = require('jiff-mpc');
-const { computeAverage, computeSum, computeSumArr } = require('./functions/arithmetic.js');
+const { computeAverage, computeSum } = require('../functions/arithmetic.js');
 
 // Handle storing and loading keys
 var KEYS_FILE = 'keys.json';
@@ -62,7 +62,8 @@ function startAnalyst()
     // Wait for user input
     console.log('Computation initialized!');
     console.log('Hit enter when you decide it is time to compute!');
-    rl.on('line', function (_) {
+
+    function handleCompute() {
       // Send begin signal
       jiffClient.emit('begin', [ 's1' ], '');
 
@@ -72,7 +73,7 @@ function startAnalyst()
         party_count = parseInt(party_count);
         console.log('BEGIN: # of parties ' + party_count);
 
-        computeSumArr(jiffClient, party_count).then((mean) => {
+        computeAverage(jiffClient, party_count).then((mean) => {
           console.log("mean: " + mean);
           jiffClient.disconnect(true, true);
           rl.close();
@@ -82,7 +83,10 @@ function startAnalyst()
       console.error('Error computing average:', error);
     });
       });
-    });
+    };
+
+    document.getElementById('computeBtn').addEventListener('click', handleCompute);
+
   });
 }
 

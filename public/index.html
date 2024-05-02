@@ -40,7 +40,7 @@
     xhr.open("POST", "/share-input");
     xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
     const body = JSON.stringify({
-      input: inputData,
+      input: [inputData],
     });
     xhr.onreadystatechange = function () {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
@@ -67,13 +67,13 @@
 <body id="body">
   <h1 id="title">Anonymous Adolescent Drug Use Questionnaire</h1>
   <hr>
-  
+
   <h3>**Insert introduction to the tool and why MPC enables the questionaire to be submitted completely anonymously while also viewing the analytics collected.** **Also motivation for the tool? (Why would the users want to see the analytics)**</h3>
-  
+
   <button id="start"type="start">Start Questionaire</button>
-  
+
    <div id="questionaire" style="display: none;">
-   
+
   <p>What is your age?</p>
   <input type="number" name="age" id="age" value="10"placeholder="Input your age here:" required>
   <br>
@@ -83,7 +83,7 @@
   <input type="radio" id="gender_man" name="gender" value="man"> Man<br>
   <input type="radio" id="gender_nonbinary" name="gender" value="nonbinary">  Nonbinary<br>
   <input type="radio" id="gender_unspecified" name="gender" value="unspecified" checked>  Prefer not to say<br>
-  
+
 
 
     <p>Have you ever drank alcohol (more than just a sip)?</p>
@@ -93,7 +93,7 @@
       <input type="radio" id="no_alc" name="truefalse_alcohol" value="no_alc" > No
     </li>
   </ul>
-  
+
    <p>Have you ever used marijuana?</p>
   <ul id = "truefalse_marijuana">
     <li>
@@ -102,7 +102,7 @@
     </li>
   </ul>
 
- 
+
      </div>
 
   <div id="remaining_questions_alcohol" style="display: none;">
@@ -137,12 +137,12 @@
     <li>Curiosity</li>
       <li>
         <select id="rank_feature1" name="rank_feature1">
-          <option value="0">--</option> 
+          <option value="0">--</option>
           <option value="1">1 (Most Important)</option>
           <option value="2">2</option>
           <option value="3">3</option>
           <option value="4">4</option>
-           <option value="5">5 (Least Important)</option> 
+           <option value="5">5 (Least Important)</option>
         </select>
       </li>
       <li>Joy Seeking</li>
@@ -153,7 +153,7 @@
           <option value="2">2</option>
           <option value="3">3</option>
           <option value="4">4</option>
-          <option value="5">5 (Least Important)</option> 
+          <option value="5">5 (Least Important)</option>
 
         </select>
       </li>
@@ -165,7 +165,7 @@
           <option value="2">2</option>
           <option value="3">3</option>
           <option value="4">4</option>
-          <option value="5">5 (Least Important)</option> 
+          <option value="5">5 (Least Important)</option>
 
         </select>
         </li>
@@ -177,8 +177,8 @@
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
-              <option value="5">5 (Least Important)</option> 
-    
+              <option value="5">5 (Least Important)</option>
+
             </select>
         </li>
         <li>Low self-confidence</li>
@@ -189,8 +189,8 @@
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
-              <option value="5">5 (Least Important)</option> 
-    
+              <option value="5">5 (Least Important)</option>
+
             </select>
           </li>
         <li>Lack of Amusement facilities</li>
@@ -201,8 +201,8 @@
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
-            <option value="5">5 (Least Important)</option> 
-    
+            <option value="5">5 (Least Important)</option>
+
             </select>
         </li>
         <li>Friends were doing it</li>
@@ -213,8 +213,8 @@
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
-                <option value="5">5 (Least Important)</option> 
-    
+                <option value="5">5 (Least Important)</option>
+
             </select>
             </li>
         <li>Proximity to an addicted person</li>
@@ -225,8 +225,8 @@
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
-            <option value="5">5 (Least Important)</option> 
-    
+            <option value="5">5 (Least Important)</option>
+
             </select>
         </li>
         <li>Low cost of drugs</li>
@@ -237,8 +237,8 @@
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
-                <option value="5">5 (Least Important)</option> 
-    
+                <option value="5">5 (Least Important)</option>
+
             </select>
         </li>
         <li>Boredom/free time</li>
@@ -249,17 +249,17 @@
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
-              <option value="5">5 (Least Important)</option> 
-    
+              <option value="5">5 (Least Important)</option>
+
             </select>
           </li>
   </ul>
-  
+
        <button id="submit"type="submit">Submit Questionnaire</button>
 
-  <hr>    
+  <hr>
    </div>
-   
+
     <script>
     const startButton = document.getElementById('start');
 		const questionnaire = document.getElementById('questionaire');
@@ -268,7 +268,7 @@
   	questionnaire.style.display = 'block';
 });
   </script>
-  
+
   <script>
     // This script shows and hides relevant questions to the user
     const firstTimeInputAlcohol = document.getElementsByName('truefalse_alcohol');
@@ -311,31 +311,31 @@
     });
 
   </script>
-  
+
   <script>
     const ageInput = document.getElementById('age');
-  
+
   ageInput.addEventListener('input', () => {
     const value = parseInt(ageInput.value); // Convert input value to a number
-  
+
     if (value > 21) {
       ageInput.value = value-1; // Clear the input if outside the range
       alert('Please enter a value between 10 and 21.');
     } else if (value < 10){
     ageInput.value = value+1; // Clear the input if outside the range
       alert('Please enter a value between 10 and 21.');
-    
+
     }
-    
+
   });
     </script>
-  
+
   <script>
     // This script will gather all of the input from the questions and vectorize it
-    document.getElementById("submit").onclick = function() { 
+    document.getElementById("submit").onclick = function() {
       // When the submit button is pressed, run the code in this anonymous function
       var inputArray = [];
-      
+
       // Get age (index = 0)
       inputArray.push(document.getElementById("age").value);
 
@@ -390,7 +390,7 @@
       }
 
       // Get the last question about reasons for starting use, assuming the question applies
-      if (document.getElementById("truefalse_alcohol").value === "yes_alc" || 
+      if (document.getElementById("truefalse_alcohol").value === "yes_alc" ||
           document.getElementById("truefalse_marijuana").value === "yes_mar") {
         inputArray.push(document.getElementById("rank_feature1").value);
         inputArray.push(document.getElementById("rank_feature2").value);
@@ -413,6 +413,6 @@
       // TODO: send this vector to the JIFF server
     };
   </script>
-  
+
 </body>
 </html>
