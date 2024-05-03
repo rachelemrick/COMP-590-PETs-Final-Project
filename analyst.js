@@ -7,6 +7,13 @@ var readline = require('readline');
 const { JIFFClient } = require('jiff-mpc');
 const { computeAverage, computeSum } = require('./functions/arithmetic.js');
 
+//DB
+const { MongoClient } = require('mongodb');
+const uri = 'mongodb://localhost:27017'; // Replace with your MongoDB connection string
+const dbName = "mpc_db"
+let database;
+
+const mongoClient = new MongoClient(uri);
 // Handle storing and loading keys
 var KEYS_FILE = 'keys.json';
 function save_keys(jiffClient) {
@@ -45,6 +52,25 @@ var options = {
   }
 };
 
+//DB CONNECTION
+async function connectToMongoDB() {
+  console.log('Attempting to connect to MongoDB...');
+  try {
+      // Connect to the server
+      await mongoClient.connect();
+      // You can access the database like this
+      database = mongoClient.db(dbName);
+      console.log('database connection successful!');
+      // You can access collections from the database like this
+      // const collection = database.collection('your_collection_name');
+
+      // If you need to close the connection later
+      // await client.close();
+  } catch (error) {
+      console.error('Error connecting to MongoDB:', error);
+  }
+}
+
 // Load the keys in case they were previously saved (otherwise we get back nulls)
 var keys = load_keys();
 options.public_key = keys.public_key;
@@ -54,7 +80,6 @@ function startAnalyst()
 {
   // Create the instance
   var jiffClient = new JIFFClient('http://localhost:8080', 'web-mpc', options);
-
   // Wait for server to connect
   jiffClient.wait_for(['s1'], function () {
     save_keys(jiffClient); // save the keys in case we need them again in the future
@@ -73,14 +98,24 @@ function startAnalyst()
         console.log('BEGIN: # of parties ' + party_count);
 
         computeAverage(jiffClient, party_count).then((mean) => {
-          console.log("mean: " + mean);
-          jiffClient.disconnect(true, true);
-          rl.close();
-        }
-      )
-        .catch(function (error) {
-      console.error('Error computing average:', error);
-    });
+        // Store the mean in the MongoDB database
+        const collection = database.collection('Mean Calculation'); // Replace with your collection name
+        const data = { mean: mean };
+        collection.insertOne(data)
+          .then(result => {
+            console.log(`Mean ${mean} inserted into the database with ID: ${result.insertedId}`);
+            jiffClient.disconnect(true, true);
+            rl.close();
+          })
+          .catch(err => {
+            console.error('Error inserting mean into the database:', err);
+            jiffClient.disconnect(true, true);
+            rl.close();
+          });
+})
+.catch(error => {
+  console.error('Error computing average:', error);
+});
       });
     });
   });
@@ -88,4 +123,5 @@ function startAnalyst()
 
 module.exports = {
   startAnalyst: startAnalyst,
+  connectToMongoDB: connectToMongoDB,
 }
