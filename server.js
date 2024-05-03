@@ -5,7 +5,13 @@ const { JIFFServer } = require('jiff-mpc');
 var mpc = require('./mpc.js');
 const path = require('path');
 const bodyParser = require('body-parser');
+//db
+const { MongoClient } = require('mongodb');
+const uri = 'mongodb://localhost:27017'; // Replace with your MongoDB connection string
+const dbName = "mpc_db"
+var database;
 
+const mongoClient = new MongoClient(uri);
 const { startAnalyst } = require('./analyst.js');
 const { clientlogic } = require('./clientlogic.js');
 
@@ -76,6 +82,26 @@ const returnAnalystStatus = () => {
     return { message: 'Analyst is already running', status: 409 };
   }
 };
+
+//DB CONNECTION
+async function connectToMongoDB() {
+  console.log('Attempting to connect to MongoDB...');
+  try {
+      // Connect to the server
+      await mongoClient.connect();
+      // You can access the database like this
+      database = mongoClient.db(dbName);
+      console.log('database connection successful!');
+      // You can access collections from the database like this
+      // const collection = database.collection('your_collection_name');
+
+      // If you need to close the connection later
+      // await client.close();
+  } catch (error) {
+      console.error('Error connecting to MongoDB:', error);
+  }
+}
+
 // Endpoint to handle the AJAX request
 app.post('/start-analyst', (req, res) => {
   const result = returnAnalystStatus();
@@ -92,7 +118,7 @@ app.post('/share-input', (req, res) => {
 http.listen(8080, function () {
   console.log('listening on *:8080');
 });
-
+connectToMongoDB();
 console.log('web-mpc demo..');
 console.log('The steps for running are as follows:');
 console.log('1. Run the analyst (node analyst.js)');
