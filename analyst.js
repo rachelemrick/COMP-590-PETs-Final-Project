@@ -6,6 +6,7 @@ var readline = require('readline');
 // var JIFFClient = require('../../lib/jiff-client.js');
 const { JIFFClient } = require('jiff-mpc');
 const { computeAverage, computeSum } = require('./functions/arithmetic.js');
+const { MongoClient } = require('mongodb'); // Import MongoClient from mongodb package
 
 // Handle storing and loading keys
 var KEYS_FILE = 'keys.json';
@@ -74,6 +75,13 @@ function startAnalyst()
 
         computeAverage(jiffClient, party_count).then((mean) => {
           console.log("mean: " + mean);
+          //const db = jiff_instance.mongoDB.db;
+          //const collection = db.collection('means'); // Assuming the collection name is 'means'
+
+          // Insert mean into MongoDB
+          //collection.insertOne({ mean: mean });
+
+          //console.log("Mean inserted into MongoDB");
           jiffClient.disconnect(true, true);
           rl.close();
         }
