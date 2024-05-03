@@ -9,9 +9,10 @@ const { computeAverage, computeSum } = require('./functions/arithmetic.js');
 
 //DB
 const { MongoClient } = require('mongodb');
-const uri = 'mongodb://localhost:27017'; // Replace with your MongoDB connection string
-const dbName = "mpc_db"
+const uri = 'mongodb://localhost:27017'; 
+const dbName = "mpc_db";
 let database;
+let shares;
 
 const mongoClient = new MongoClient(uri);
 // Handle storing and loading keys
@@ -32,6 +33,21 @@ function load_keys() {
   } catch (err) {
     // key file does not exist
     return { public_key: null, secret_key: null };
+  }
+}
+
+async function fetchShares() {
+  try {
+    const client = await MongoClient.connect(uri);
+    const db = client.db(dbName);
+    const sharesCollection = db.collection('Shares');
+    shares = await sharesCollection.find().toArray();
+    client.close();
+    console.log(shares);
+    return shares;
+  } catch (err) {
+    console.error('Error fetching shares from the database:', err);
+    throw err;
   }
 }
 
@@ -76,8 +92,7 @@ var keys = load_keys();
 options.public_key = keys.public_key;
 options.secret_key = keys.secret_key;
 
-function startAnalyst()
-{
+function startAnalyst() {
   // Create the instance
   var jiffClient = new JIFFClient('http://localhost:8080', 'web-mpc', options);
   // Wait for server to connect
@@ -96,7 +111,8 @@ function startAnalyst()
         // Computation starts
         party_count = parseInt(party_count);
         console.log('BEGIN: # of parties ' + party_count);
-
+        //Pull shares from db
+        fetchShares();
         computeAverage(jiffClient, party_count).then((mean) => {
         // Store the mean in the MongoDB database
         const collection = database.collection('Mean Calculation'); // Replace with your collection name
